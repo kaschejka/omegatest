@@ -34,7 +34,11 @@ class usersController extends Controller
      */
     public function create()
     {
+      if (auth()->user()->role == 'admin' || auth()->user()->role == 'manager') {
         return view('user_company\create');
+      } else {
+        return redirect()->route('users.index');
+      }
     }
 
     /**
@@ -85,8 +89,13 @@ class usersController extends Controller
      */
     public function edit($id)
     {
-        $data = company_user::find($id);
-        return view('user_company\edit',compact('data'));
+        if (auth()->user()->role == 'admin' || auth()->user()->role == 'manager') {
+          $data = company_user::find($id);
+          return view('user_company\edit',compact('data'));
+        } else {
+          return redirect()->route('users.index');
+        }
+
     }
 
     /**
@@ -98,7 +107,7 @@ class usersController extends Controller
      */
     public function update(Request $request, $id)
     {
-     // echo dd($request);
+
       $user = company_user::find($id);
       $user->fio = $request->name;
       $user->save();
@@ -106,7 +115,13 @@ class usersController extends Controller
       $position = user_position::where('company_user_id',$id)->first();
       $position->position_id = $position_id->id;
       $position->save();
-    echo dd($user);
+      user_department::where('company_user_id',$id)->delete();
+      foreach ($request->department as $key => $value) {
+        DB::table('user_departments')->insert([
+          ['department_id' => $value, 'company_user_id' => $id]]);
+      }
+      return redirect()->route('users.index')
+                            ->with('success','Пользователь успешно отредактирован.');
 
     }
 
@@ -118,8 +133,8 @@ class usersController extends Controller
      */
     public function destroy($id)
     {
-      company_user::destroy($id);
 
+      company_user::destroy($id);
         return redirect()->route('users.index')
                         ->with('success','User deleted successfully');
     }
