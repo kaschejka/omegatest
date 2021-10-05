@@ -58,9 +58,6 @@ class usersController extends Controller
         $user_position->position_id = $position_id->id;
         $user_position->save();
 
-
-
-
         foreach ($request->department as $key => $value) {
           DB::table('user_departments')->insert([
             ['department_id' => $value, 'company_user_id' => $user_id]]);
@@ -88,7 +85,8 @@ class usersController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = company_user::find($id);
+        return view('user_company\edit',compact('data'));
     }
 
     /**
@@ -100,7 +98,16 @@ class usersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+     // echo dd($request);
+      $user = company_user::find($id);
+      $user->fio = $request->name;
+      $user->save();
+      $position_id = position::where('name',$request->userpos)->first();
+      $position = user_position::where('company_user_id',$id)->first();
+      $position->position_id = $position_id->id;
+      $position->save();
+    echo dd($user);
+
     }
 
     /**
