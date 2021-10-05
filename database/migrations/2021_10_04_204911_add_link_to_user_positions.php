@@ -15,7 +15,7 @@ class AddLinkToUserPositions extends Migration
     {
         Schema::table('user_positions', function (Blueprint $table) {
           $table->unsignedBigInteger('company_user_id');
-           $table->foreign('company_user_id')->references('id')->on('company_users');
+           $table->foreign('company_user_id')->references('id')->on('company_users')->onDelete('cascade');
            $table->unsignedBigInteger('position_id');
            $table->foreign('position_id')->references('id')->on('positions');
         });

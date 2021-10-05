@@ -35,7 +35,12 @@
             {{ $department->department_name->name }},
             @endforeach
           </td>
-          <td></td>
+          <td><form action="{{ route('users.destroy',$user->id) }}" method="POST">
+
+              @csrf
+              @method('DELETE')
+              <button type="submit" class="btn btn-danger">Delete</button>
+          </form></td>
           <td>
 
           </td>

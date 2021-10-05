@@ -85,6 +85,9 @@ class usersController extends Controller
      */
     public function destroy($id)
     {
-        //
+      company_user::destroy($id);
+
+        return redirect()->route('users.index')
+                        ->with('success','User deleted successfully');
     }
 }
