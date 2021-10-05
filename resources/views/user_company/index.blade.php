@@ -16,7 +16,9 @@
           <p>{{ $message }}</p>
       </div>
   @endif
-
+  <div class="pull-right">
+                              <a class="btn btn-primary" href="{{ route('users.create') }}"> Добавить пользователя</a>
+                          </div>
   <table class="table table-bordered">
       <tr>
           <th>No</th>
@@ -31,9 +33,13 @@
           <td>{{ $user->fio }}</td>
           <td>{{ $user->user_positions->position_name->name }}</td>
           <td>
-            @foreach ($user->user_departments as $department)
-            {{ $department->department_name->name }},
-            @endforeach
+          <?php
+          $dep = [];
+          foreach ($user->user_departments as $department) {
+            array_push($dep,$department->department_name->name);
+          }
+          echo implode(',',$dep);
+        ?>
           </td>
           <td><form action="{{ route('users.destroy',$user->id) }}" method="POST">
 
