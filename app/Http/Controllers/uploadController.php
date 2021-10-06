@@ -11,7 +11,7 @@ class uploadController extends Controller
   public function fileupload (Request $req)
   {
 
-Storage::put('/public',$req->file);
+Storage::put('/public/photo',$req->file);
 return redirect()->route('upload')->with('success','Фото загружено.');
 
 }
