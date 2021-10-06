@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\usersController;
 use App\HTTP\Middleware\role;
 use App\Http\Controllers\configController;
+use App\Http\Controllers\uploadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,10 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/home', function () {
     return view('dashboard');
 })->name('dashboard');
+Route::middleware(['auth:sanctum', 'verified'])->get('/upload', function () {
+    return view('upload');
+})->name('upload');
+
 
 Route::middleware(['auth:sanctum', 'verified','role:admin'])->get('/config', function () {
     return view('config');
@@ -30,3 +35,4 @@ Route::middleware(['auth:sanctum', 'verified','role:admin'])->get('/config', fun
 
 Route::middleware(['auth:sanctum', 'verified','role:admin,user,manager'])->resource('users', usersController::class);
 Route::middleware(['auth:sanctum', 'verified','role:admin'])->post('/config/submit', [configController::class,'addmanager']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/subupload', [uploadController::class,'fileupload']);
